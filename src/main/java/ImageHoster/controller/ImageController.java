@@ -1,5 +1,6 @@
 package ImageHoster.controller;
 
+import ImageHoster.model.Comment;
 import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
@@ -52,6 +53,33 @@ public class ImageController {
         model.addAttribute("tags", image.getTags());
         model.addAttribute("comments", image.getComments());
         return "images/image";
+    }
+
+    @RequestMapping(value = "/image/{imageId}/{title}/comments", method = RequestMethod.POST)
+    public String saveImageComments(@RequestParam("comment") MultipartFile file, @PathVariable("imageId") Integer imageId, @PathVariable("title") String title, Model model, HttpSession session) throws IOException {
+
+        User user = (User) session.getAttribute("loggeduser");
+        String commentText = convertFileToString(file);
+
+        //Debug code
+        System.out.println("*********************************** See down here V");
+        System.out.println(commentText);
+        System.out.println(user.getUsername());
+
+        Comment newComment = new Comment();
+        newComment.setText(commentText);
+        newComment.setUser(user);
+
+        Image image = imageService.getImageByTitle(imageId);
+        List<Comment> commentList = image.getComments();
+        commentList.add(newComment);
+
+        imageService.updateImage(image);
+
+        model.addAttribute("imageId", imageId);
+        model.addAttribute("title", title);
+
+        return "/images/{imageId}/{title}";
     }
 
     //This controller method is called when the request pattern is of type 'images/upload'
@@ -207,4 +235,12 @@ public class ImageController {
 
         return tagString.toString();
     }
+
+    private String convertFileToString(MultipartFile file) throws IOException {
+        String comment = String.valueOf(file.getBytes());
+        return comment;
+    }
 }
+
+
+
