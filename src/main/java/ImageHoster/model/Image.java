@@ -51,7 +51,7 @@ public class Image {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Tag> tags = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "comment_id")
     private List<Comment> comments = new ArrayList<>();
 
@@ -130,4 +130,8 @@ public class Image {
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
+
+    public List<Comment> getComments() { return comments; }
+
+    public void setComments(List<Comment> comments) { this.comments = comments; }
 }
