@@ -51,6 +51,10 @@ public class Image {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Tag> tags = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "comment_id")
+    private List<Comment> comments = new ArrayList<>();
+
     public Image() {
     }
 
