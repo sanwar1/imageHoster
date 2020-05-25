@@ -44,7 +44,6 @@
             <img th:src="'data:image/jpeg;base64,'+${image.imageFile}"/>
         </div>
 
-
         <ul class="list mt0 mb5 pl0">
             <li th:each="tag : ${tags}" class="dib">
             <span class="f6 link dim ba ph3 pv2 mb2 dib black mr2" th:text="${tag.name}">Tag
