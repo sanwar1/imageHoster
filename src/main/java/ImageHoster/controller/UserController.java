@@ -46,7 +46,7 @@ public class UserController {
         boolean isValid = validate(user.getPassword());
         if (isValid) {
             userService.registerUser(user);
-            return "redirect:/users/login";
+            return "users/login";
         }
         else {
             String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
@@ -97,7 +97,10 @@ public class UserController {
     private boolean validate(String password) {
         Pattern pattern;
         Matcher matcher;
-        String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[~!@#$%^&*()_+`=/?<>;:]).{0,})";
+
+        //String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~!@#$%^&*()_+`=/?<>;:]).{0,})";
+
+        String PASSWORD_PATTERN = "((?=.*[a-z|A-Z])(?=.*\\d)(?=.*[~!@#$%^&*()_+`=/?<>;:]).{0,})";
 
         pattern = Pattern.compile(PASSWORD_PATTERN);
         matcher = pattern.matcher(password);

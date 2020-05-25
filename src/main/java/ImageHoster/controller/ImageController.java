@@ -101,13 +101,19 @@ public class ImageController {
     public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
         Image image = imageService.getImage(imageId);
 
-        String tags = convertTagsToString(image.getTags());
-        model.addAttribute("image", image);
-        model.addAttribute("tags", tags);
+        User sessionUser = (User) session.getAttribute("loggeduser");
+        User imageUser = image.getUser();
 
-        if (session.getAttribute("loggeduser").equals(image.getUser())) {
+        if (sessionUser.getUsername().equals(imageUser.getUsername())) {
+            model.addAttribute("image", image);
+            String tags = convertTagsToString(image.getTags());
+            model.addAttribute("tags", tags);
+            model.addAttribute("comments", image.getComments());
             return "images/edit";
         } else {
+            model.addAttribute("image", image);
+            model.addAttribute("tags", image.getTags());
+            model.addAttribute("comments", image.getComments());
             String error = "Only the owner of the image can edit the image";
             model.addAttribute("editError", error);
             return "images/image";
@@ -156,7 +162,11 @@ public class ImageController {
     public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, Model model, HttpSession session) {
 
         Image image = imageService.getImage(imageId);
-        if (session.getAttribute("loggeduser").equals(image.getUser())) {
+
+        User sessionUser = (User) session.getAttribute("loggeduser");
+        User imageUser = image.getUser();
+
+        if (sessionUser.getUsername().equals(imageUser.getUsername())) {
             imageService.deleteImage(imageId);
             return "redirect:/images";
         } else {
