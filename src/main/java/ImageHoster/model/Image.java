@@ -51,8 +51,8 @@ public class Image {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Tag> tags = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "comment_id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "images_id")
     private List<Comment> comments = new ArrayList<>();
 
     public Image() {

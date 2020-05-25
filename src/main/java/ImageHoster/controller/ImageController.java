@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Controller
@@ -56,30 +58,23 @@ public class ImageController {
     }
 
     @RequestMapping(value = "/image/{imageId}/{title}/comments", method = RequestMethod.POST)
-    public String saveImageComments(@RequestParam("comment") MultipartFile file, @PathVariable("imageId") Integer imageId, @PathVariable("title") String title, Model model, HttpSession session) throws IOException {
+    public String saveImageComments(@RequestParam("comment") String commentText, @PathVariable("imageId") Integer imageId, @PathVariable("title") String title, Model model, HttpSession session) throws IOException {
 
         User user = (User) session.getAttribute("loggeduser");
-        String commentText = convertFileToString(file);
-
-        //Debug code
-        System.out.println("*********************************** See down here V");
-        System.out.println(commentText);
-        System.out.println(user.getUsername());
 
         Comment newComment = new Comment();
         newComment.setText(commentText);
+        newComment.setCreatedDate(new Date());
         newComment.setUser(user);
 
         Image image = imageService.getImageByTitle(imageId);
         List<Comment> commentList = image.getComments();
         commentList.add(newComment);
+        image.setComments(commentList);
 
         imageService.updateImage(image);
 
-        model.addAttribute("imageId", imageId);
-        model.addAttribute("title", title);
-
-        return "/images/{imageId}/{title}";
+        return "redirect:/images/" + imageId + "/" + URLEncoder.encode(title, StandardCharsets.UTF_8.toString());
     }
 
     //This controller method is called when the request pattern is of type 'images/upload'
@@ -130,8 +125,7 @@ public class ImageController {
 
         if (session.getAttribute("loggeduser").equals(image.getUser())) {
             return "images/edit";
-        }
-        else {
+        } else {
             String error = "Only the owner of the image can edit the image";
             model.addAttribute("editError", error);
             return "images/image";
@@ -183,8 +177,7 @@ public class ImageController {
         if (session.getAttribute("loggeduser").equals(image.getUser())) {
             imageService.deleteImage(imageId);
             return "redirect:/images";
-        }
-        else {
+        } else {
             String error = "Only the owner of the image can delete the image";
             model.addAttribute("deleteError", error);
             model.addAttribute("image", image);
