@@ -38,13 +38,9 @@ public class CommentController {
         newComment.setText(commentText);
         newComment.setCreatedDate(new Date());
         newComment.setUser(user);
+        newComment.setImage(imageService.getImage(imageId));
 
-        Image image = imageService.getImageByTitle(imageId);
-        List<Comment> commentList = image.getComments();
-        commentList.add(newComment);
-        image.setComments(commentList);
-
-        commentService.updateImageComments(image);
+        commentService.updateImageComments(newComment);
 
         return "redirect:/images/" + imageId + "/" + URLEncoder.encode(title, StandardCharsets.UTF_8.toString());
     }
