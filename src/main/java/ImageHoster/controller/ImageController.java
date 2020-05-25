@@ -57,25 +57,7 @@ public class ImageController {
         return "images/image";
     }
 
-    @RequestMapping(value = "/image/{imageId}/{title}/comments", method = RequestMethod.POST)
-    public String saveImageComments(@RequestParam("comment") String commentText, @PathVariable("imageId") Integer imageId, @PathVariable("title") String title, Model model, HttpSession session) throws IOException {
 
-        User user = (User) session.getAttribute("loggeduser");
-
-        Comment newComment = new Comment();
-        newComment.setText(commentText);
-        newComment.setCreatedDate(new Date());
-        newComment.setUser(user);
-
-        Image image = imageService.getImageByTitle(imageId);
-        List<Comment> commentList = image.getComments();
-        commentList.add(newComment);
-        image.setComments(commentList);
-
-        imageService.updateImage(image);
-
-        return "redirect:/images/" + imageId + "/" + URLEncoder.encode(title, StandardCharsets.UTF_8.toString());
-    }
 
     //This controller method is called when the request pattern is of type 'images/upload'
     //The method returns 'images/upload.html' file
@@ -227,11 +209,6 @@ public class ImageController {
         tagString.append(lastTag.getName());
 
         return tagString.toString();
-    }
-
-    private String convertFileToString(MultipartFile file) throws IOException {
-        String comment = String.valueOf(file.getBytes());
-        return comment;
     }
 }
 
