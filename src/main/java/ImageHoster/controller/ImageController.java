@@ -39,7 +39,7 @@ public class ImageController {
     }
 
     //This method is called when the details of the specific image with corresponding title are to be displayed
-    //The logic is to get the image from the databse with corresponding title. After getting the image from the database the details are shown
+    //The logic is to get the image from the database with corresponding title. After getting the image from the database the details are shown
     //First receive the dynamic parameter in the incoming request URL in a string variable 'title' and also the Model type object
     //Call the getImageByTitle() method in the business logic to fetch all the details of that image
     //Add the image in the Model type object with 'image' as the key
@@ -49,15 +49,16 @@ public class ImageController {
     //Here a list of tags is added in the Model type object
     //this list is then sent to 'images/image.html' file and the tags are displayed
     @RequestMapping("/images/{imageId}/{title}")
-    public String showImage(@PathVariable("imageId") Integer imageId, @PathVariable("title") String title, Model model) {
+    public String showImage(@PathVariable("imageId") Integer imageId, @PathVariable("title") String title, Model model) throws NullPointerException {
         Image image = imageService.getImageByTitle(imageId);
         model.addAttribute("image", image);
-        model.addAttribute("tags", image.getTags());
+
+        List<Tag> tags = getTagsList(image);
+
+        model.addAttribute("tags", tags);
         model.addAttribute("comments", image.getComments());
         return "images/image";
     }
-
-
 
     //This controller method is called when the request pattern is of type 'images/upload'
     //The method returns 'images/upload.html' file
@@ -98,7 +99,7 @@ public class ImageController {
     //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
-    public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
+    public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) throws NullPointerException {
         Image image = imageService.getImage(imageId);
 
         User sessionUser = (User) session.getAttribute("loggeduser");
@@ -106,13 +107,22 @@ public class ImageController {
 
         if (sessionUser.getUsername().equals(imageUser.getUsername())) {
             model.addAttribute("image", image);
-            String tags = convertTagsToString(image.getTags());
+
+            String tags = "";
+            List<Tag> tagsList = image.getTags();
+            if (tagsList.size() > 0) {
+                tags = convertTagsToString(image.getTags());
+            }
+
             model.addAttribute("tags", tags);
             model.addAttribute("comments", image.getComments());
             return "images/edit";
         } else {
             model.addAttribute("image", image);
-            model.addAttribute("tags", image.getTags());
+
+            List<Tag> tags = getTagsList(image);
+            model.addAttribute("tags", tags);
+
             model.addAttribute("comments", image.getComments());
             String error = "Only the owner of the image can edit the image";
             model.addAttribute("editError", error);
@@ -219,6 +229,20 @@ public class ImageController {
         tagString.append(lastTag.getName());
 
         return tagString.toString();
+    }
+
+    private List<Tag> getTagsList(Image image) throws NullPointerException {
+        List<Tag> tagsList = image.getTags();
+        if (tagsList.size() > 0) {
+            return tagsList;
+        }
+        else {
+            List<Tag> tempTagList = new ArrayList<>();
+            Tag tempTag = new Tag();
+            tempTag.setName("No Tags");
+            tempTagList.add(tempTag);
+            return tempTagList;
+        }
     }
 }
 

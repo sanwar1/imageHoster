@@ -90,9 +90,7 @@ public class ImageControllerTest {
         this.mockMvc.perform(get("/images/1/new").session(session))
                 .andExpect(view().name("images/image"))
                 .andExpect(content().string(containsString("Welcome User. This is the image")));
-
     }
-
 
     //This test checks the controller logic when the logged in user sends a GET request to the server to get the form to upload an image in the application and checks whether the logic returns the html file 'images/upload.html'
     @Test
