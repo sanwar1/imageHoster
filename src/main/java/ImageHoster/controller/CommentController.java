@@ -1,7 +1,6 @@
 package ImageHoster.controller;
 
 import ImageHoster.model.Comment;
-import ImageHoster.model.Image;
 import ImageHoster.model.User;
 import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
 
 @Controller
 public class CommentController {
