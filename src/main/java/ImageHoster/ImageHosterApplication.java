@@ -9,7 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan
 @EnableAutoConfiguration
 public class ImageHosterApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(ImageHosterApplication.class, args);
-    }
+
+  public static void main(String[] args) {
+    SpringApplication.run(ImageHosterApplication.class, args);
+  }
 }

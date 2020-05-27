@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommentService {
 
-    @Autowired
-    private CommentRepository commentRepository;
+  @Autowired
+  private CommentRepository commentRepository;
 
-    public void updateImageComments(Comment newComment) {
-        commentRepository.updateImageComment(newComment);
-    }
+  public void updateImageComments(Comment newComment) {
+    commentRepository.updateImageComment(newComment);
+  }
 }
