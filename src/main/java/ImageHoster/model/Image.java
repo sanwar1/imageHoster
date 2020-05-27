@@ -49,13 +49,14 @@ public class Image {
     //Note that no column will be generated for this attribute in the database instead a new table will be created
     //Since the mapping is Many to Many, a new table will be generated containing the two columns both referencing to the primary key of both the tables ('images', 'tags')
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<Tag> tags = new ArrayList<>();
+    private List<Tag> tags;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "images_id")
     private List<Comment> comments = new ArrayList<>();
 
     public Image() {
+        this.tags = defaultTagList();
     }
 
     public Image(int id, String title, String imageFile, Date date) {
@@ -63,6 +64,7 @@ public class Image {
         this.title = title;
         this.imageFile = imageFile;
         this.date = date;
+        this.tags = defaultTagList();
     }
 
     public Image(int id, String title, String imageFile, String description, Date date) {
@@ -71,6 +73,7 @@ public class Image {
         this.imageFile = imageFile;
         this.description = description;
         this.date = date;
+        this.tags = defaultTagList();
     }
 
 
@@ -134,4 +137,12 @@ public class Image {
     public List<Comment> getComments() { return comments; }
 
     public void setComments(List<Comment> comments) { this.comments = comments; }
+
+    private List<Tag> defaultTagList() {
+        Tag tag = new Tag();
+        tag.setName("Image");
+        List<Tag> tagList = new ArrayList<>();
+        tagList.add(tag);
+        return tagList;
+    }
 }
