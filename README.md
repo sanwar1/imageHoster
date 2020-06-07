@@ -26,10 +26,10 @@ upload issues. Two, the Edit/Delete issue by non-owners.
 ensured that the test cases did not fail.
 
 5. **final**: *[DEFAULT branch]* Changes were primarily cosmetics: Code clean up, indentation,
-commenting. And adding this read me file.
+commenting. And adding this README.md file to provide preliminary inputs to the evaluators.
 
 ### Formatting Style
-The recommended IntelliJ Java Google Style Guide was imported in the IDE and the formatting was
+The recommended IntelliJ Java Google Style Guide was imported in the IDE, and the formatting was
 applied across the entire code. The link to the XML is below for reference. 
 https://raw.githubusercontent.com/google/styleguide/gh-pages/intellij-java-google-style.xml
 
