@@ -123,7 +123,6 @@ public class ImageController {
       List<Tag> tagsList = image.getTags();
       String tags = convertTagsToString(image.getTags());
       model.addAttribute("tags", tags);
-      //model.addAttribute("comments", image.getComments());
       return "images/edit";
     } else {
       List<Tag> tags = image.getTags();
